@@ -6,9 +6,21 @@
     grid-template-columns: repeat(3, 1fr);
 }
 
+.upcoming {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 10;
+}
+
 .cell.empty {
     background-color: rgb(200, 200, 200);
 }
+
+.cell.hidden {
+    visibility: hidden;
+}
+
 
 .cell.I {
     background-color: rgb(80, 227, 230);

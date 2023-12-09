@@ -36,10 +36,30 @@ export function getRandomBlock() {
     return blockValues[Math.floor(Math.random() * blockValues.length)];
 }
 
+function rotateBlock(shape) {
+    const rows = shape.length;
+    const columns = shape[0].length;
+
+    const rotated = Array(rows)
+        .fill(null)
+        .map(() => Array(columns).fill(false));
+
+    for (let row = 0; row < rows; row++) {
+        for (let column = 0; column < columns; column++) {
+            rotated[column][rows - 1 - row] = shape[row][column];
+        }
+    }
+
+    return rotated;
+}
+
 export const Action = {
     type: 'start' | 'drop' | 'commit' | 'move',
     newBoard: [],
     newBlock: Block,
+    isPressingLeft: false,
+    isPressingRight: false,
+    isRotating: false,
 };
 
 function boardReducer(state, action = Action) {
@@ -60,13 +80,33 @@ function boardReducer(state, action = Action) {
             break;
         case 'commit':
             return {
-                board: action.newBoard,
+                board: [
+                    ...getEmptyBoard(BOARD_HEIGHT - action.newBoard.length),
+                    ...action.newBoard,
+                  ],
                 droppingRow: 0,
                 droppingColumn: 3,
                 droppingBlock: action.newBlock,
                 droppingShape: SHAPES[action.newBlock].shape,
             };
         case 'move':
+            const rotatedShape = action.isRotating
+                ? rotateBlock(newState.droppingShape)
+                : newState.droppingShape;
+            let columnOffset = action.isPressingLeft ? -1 : 0;
+            columnOffset = action.isPressingRight ? 1 : columnOffset;
+            if (
+                !hasCollisions(
+                    newState.board,
+                    rotatedShape,
+                    newState.droppingRow,
+                    newState.droppingColumn + columnOffset
+                )
+            ) {
+                newState.droppingColumn += columnOffset;
+                newState.droppingShape = rotatedShape;
+            }
+            break;
         default:
             throw new Error('Unhandled action type');
     }
@@ -82,7 +122,7 @@ export function hasCollisions(board, currentShape, row, column) {
                 if (isSet && (row + rowIndex >= board.length ||
                     column + colIndex >= board[0].length ||
                     column + colIndex < 0 ||
-                    board[row + rowIndex][column + colIndex] != 'empty')
+                    board[row + rowIndex][column + colIndex] !== 'empty')
                 ) {
                     hasCollision = true;
                 }
