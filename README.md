@@ -1,6 +1,7 @@
 # Tetris en React
 
-Este repositorio contiene una implementación del clásico juego Tetris desarrollado en React. Puedes jugarlo en este [link](https://tetris-emanuelruiz.netlify.app/)
+Este repositorio contiene una implementación del clásico juego Tetris desarrollado en React. 
+Puedes jugarlo en este [link](https://tetris-emanuelruiz.netlify.app/)
 
 ## Instalación
 
