@@ -1,12 +1,15 @@
+import play from "./assets/play.svg";
+import pause from "./assets/pause.svg";
 import Board from "./components/Board"
 import UpcomingBlocks from "./components/UpcomingBlocks";
 import { useTetris } from "./hooks/useTetris"
+import { useCallback } from "react";
 
 
 
 function App() {
 
-  const {board, startGame, isPlaying, score, upcomingBlocks} = useTetris();
+  const { board, startGame, isPlaying, score, upcomingBlocks, isPaused, setIsPaused } = useTetris();
 
   return (
 
@@ -19,6 +22,14 @@ function App() {
           <button onClick={startGame}>New Game</button>
         )}
       </div>
+      {isPlaying && <button className="play-btn" onClick={() => setIsPaused((prevIsPaused) => !prevIsPaused)}>
+        {isPaused ? (
+          <img src={play} alt="Play" width="100%" height="100%"  />
+        ) : (
+          <img src={pause} alt="Pause" width="100%" height="100%" />
+        )}
+      </button>}
+
     </div>
 
   )

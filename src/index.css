@@ -1,9 +1,24 @@
 .App {
+    position: relative;
     display: grid;
     grid-template-areas: 
     ". title ."
     ". game controls";
     grid-template-columns: repeat(3, 1fr);
+}
+
+.play-btn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    border: none;
+    border-radius: 10px;
+    padding: 15px;
+    background: none;
+    background-color: #202020;
+    cursor: pointer;
 }
 
 .upcoming {

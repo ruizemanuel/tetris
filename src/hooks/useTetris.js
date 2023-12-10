@@ -15,6 +15,7 @@ export function useTetris() {
     const [isCommitting, setIsCommitting] = useState(false);
     const [upcomingBlocks, setUpComingBlocks] = useState([]);
     const [score, setScore] = useState(0);
+    const [isPaused, setIsPaused] = useState(false);
 
     const [
         { board, droppingRow, droppingColumn, droppingBlock, droppingShape },
@@ -95,12 +96,12 @@ export function useTetris() {
     ]);
 
     useInterval(() => {
-        if (!isPlaying) {
-            return;
+        if (!isPlaying || isPaused) {
+          return;
         }
         gameTick();
-    }, tickSpeed);
-
+      }, tickSpeed);
+      
     useEffect(() => {
         if (!isPlaying) {
             return;
@@ -127,7 +128,7 @@ export function useTetris() {
         };
 
         const handleKeyDown = (event) => {
-            if (event.repeat) {
+            if (event.repeat || isPaused) {
                 return;
             }
 
@@ -154,6 +155,11 @@ export function useTetris() {
         };
 
         const handleKeyUp = (event) => {
+            
+            if (isPaused) {
+                return;
+              }
+
             if (event.key === 'ArrowDown') {
                 setTickSpeed(TickSpeed.Normal);
             }
@@ -177,7 +183,7 @@ export function useTetris() {
             clearInterval(moveIntervalID);
             setTickSpeed(TickSpeed.Normal);
         };
-    }, [dispatchBoardState, isPlaying]);
+    }, [dispatchBoardState, isPlaying, isPaused]);
 
     const renderedBoard = board ? JSON.parse(JSON.stringify(board)) : null;
 
@@ -190,7 +196,9 @@ export function useTetris() {
         startGame,
         isPlaying,
         score,
-        upcomingBlocks
+        upcomingBlocks,
+        isPaused, 
+        setIsPaused,
     };
 }
 
