@@ -1,4 +1,4 @@
-# Tetris en React con useReducer
+# Tetris en React
 
 Este repositorio contiene una implementación del clásico juego Tetris desarrollado en React.
 
